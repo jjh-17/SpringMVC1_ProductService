@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import springMVC.productservice.domain.Product;
 import springMVC.productservice.domain.ProductRepository;
 
@@ -80,13 +81,39 @@ public class BasicProductController {
     //상품 등록 - @ModelAttribute 생략
     //String, int와 같은 형은 @RequestParam이, 사용자 정의 클래스 형인 경우엔 @ModelAttribute 자동 수행
     //@ModelAttribute 자동 수행
-    @PostMapping("/add")
+    //@PostMapping("/add")
     public String addProduct4(Product product) {
 
         productRepository.save(product);
 
         return "basic/product";
     }
+
+    /*
+    addProduct1~4 : 상품 추가 후, 새로고침 시 상품이 무한히 저장됨
+        ==> 등록 후 상태는 Post/add. 새로고침 시 마지막에 서버에 전송한 데이터를 다시 전송된다.
+            즉, Post/add가 서버로 다시 전송되어 상품이 다시 저장된다
+            ==> redirect를 이용하여 Get을 보내도록 한다.
+     */
+    //상품 추가 : redirect
+    //@PostMapping("/add")
+    public String addProduct5(Product product) {
+
+        productRepository.save(product);
+
+        return "redirect:/basic/products/" + product.getId();
+    }
+
+    //상품 추가 : RedirectAttributes : URL 인코딩 수행
+    @PostMapping("/add")
+    public String addProduct6(Product product, RedirectAttributes redirectAttributes) {
+        Product savedProduct = productRepository.save(product);
+
+        redirectAttributes.addAttribute("id", savedProduct.getId());
+        redirectAttributes.addAttribute("status", true);
+        return "redirect:/basic/products/{id}";
+    }
+
 
     //상품 수정 폼
     @GetMapping("/{id}/edit")
@@ -96,7 +123,7 @@ public class BasicProductController {
         return "basic/editForm";
     }
 
-    //상품 수정
+    //상품 수정 - @PathVariable : @Mapping된 URI 내 'id'에 할당된 값을 갖는다
     @PostMapping("/{id}/edit")
     public String editProduct(@PathVariable Long id, @ModelAttribute Product product) {
         productRepository.update(id, product);
