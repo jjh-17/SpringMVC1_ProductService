@@ -98,9 +98,7 @@ public class BasicProductController {
     //상품 추가 : redirect
     //@PostMapping("/add")
     public String addProduct5(Product product) {
-
         productRepository.save(product);
-
         return "redirect:/basic/products/" + product.getId();
     }
 
