@@ -2,7 +2,6 @@ package springMVC.productservice.web.controller;
 
 import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -12,7 +11,6 @@ import springMVC.productservice.domain.ProductRepository;
 
 import java.util.List;
 
-//상품 목록 컨트롤러
 @Controller
 @RequestMapping("/basic/products")
 @RequiredArgsConstructor
@@ -43,7 +41,7 @@ public class BasicProductController {
     }
 
     //상품 등록 - @RequestParam
-    //@PostMapping("/add")
+//    @PostMapping("/add")
     public String addProduct1(@RequestParam String name,
                                @RequestParam int price,
                                @RequestParam Integer quantity,
@@ -60,32 +58,26 @@ public class BasicProductController {
     }
 
     //상품 등록 - @ModelAttribute : 객체 생성 및 addAttribute 수행
-    //@PostMapping("/add")
+//    @PostMapping("/add")
     public String addProduct2(@ModelAttribute("product") Product product) {
-
         productRepository.save(product);
-
         return "basic/product";
     }
 
     //상품 등록 - @ModelAttribute : Model 미지정시, 클래스형의 앞부분을 소문자로 바꾼 Model에 addAttribute 수행
     //HelloData product면 addAttribute('helloData', product) 수행
-    //@PostMapping("/add")
+//    @PostMapping("/add")
     public String addProduct3(@ModelAttribute Product product) {
-
         productRepository.save(product);
-
         return "basic/product";
     }
 
     //상품 등록 - @ModelAttribute 생략
     //String, int와 같은 형은 @RequestParam이, 사용자 정의 클래스 형인 경우엔 @ModelAttribute 자동 수행
     //@ModelAttribute 자동 수행
-    //@PostMapping("/add")
+//    @PostMapping("/add")
     public String addProduct4(Product product) {
-
         productRepository.save(product);
-
         return "basic/product";
     }
 
@@ -96,7 +88,7 @@ public class BasicProductController {
             ==> redirect를 이용하여 Get을 보내도록 한다.
      */
     //상품 추가 : redirect
-    //@PostMapping("/add")
+//    @PostMapping("/add")
     public String addProduct5(Product product) {
         productRepository.save(product);
         return "redirect:/basic/products/" + product.getId();

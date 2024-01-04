@@ -7,15 +7,16 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-@Repository //ComponentScan의 대상이 된다
+// ComponentScan의 대상이 된다
+@Repository
 public class ProductRepository {
 
-    //static: 메모리 static 영역에 적재 ==> 공통적으로 사용 가능
+//    static: 메모리 static 영역에 적재 ==> 공통적으로 사용 가능
     private static final Map<Long, Product> store = new HashMap<>();
     private static long sequence = 0L;
 
 
-    //상품 저장
+//    상품 저장
     public Product save(Product product) {
         product.setId(++sequence);
         store.put(product.getId(), product);
@@ -23,17 +24,17 @@ public class ProductRepository {
         return product;
     }
 
-    //상품 조회 - Id
+//    상품 조회 - Id
     public Product findById(Long id) {
         return store.get(id);
     }
 
-    //상품 조회 - 전체
+//    상품 조회 - 전체
     public List<Product> findAll() {
         return new ArrayList<>(store.values());
     }
 
-    //상품 수정
+//    상품 수정
     public void update(Long id, Product newProduct) {
         Product product = findById(id);
 
@@ -42,7 +43,7 @@ public class ProductRepository {
         product.setQuantity(newProduct.getQuantity());
     }
 
-    //상품 전체 삭제
+//    상품 전체 삭제
     public void clearStore() {
         store.clear();
     }
